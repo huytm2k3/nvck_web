@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        
+        
+    </style>
+<%- include('head.html') -%>
+<body>
+    <%- include('header.html') -%>
+    <div id="content">
+        <div class="story_wrapper">
+            <div class="wrapper">
+                <div class="story">
+                    <div class="meta_data">
+                        <div class="meta_data__top">
+                            <div class="left">
+                                <img id="story_img" src="<%= meta.image %>" alt="">
+                            </div>
+                            <div class="center">
+                                <div class="title">
+                                    <a href="/doc-truyen/<%= hash_name %>">
+                                        <p id="hash" style="display: none;"><%=meta.hash_name%></p>
+                                        <h1>
+                                            <%= meta.name %>
+                                        </h1>
+                                    </a>
+                                </div>
+                                <div class="tags">
+                                    <span class="tag"><%= meta.author_name %></span>
+                                    <span class="tag"><%= meta.status %></span>
+                                    <span class="tag"><%= meta.source %></span>
+                                </div>
+                                <div class="rates">
+                                    <span id="rate_content"></span> <img id="rate_icon" src="/imgs/icons/star-on.png" alt=""> - 
+                                    <%= meta.n_rates %> lượt đánh giá.      
+                                    
+                                </div>
+                                <div class="short_description">
+                                    <%- meta.description.substring(1, 30).replaceAll('\n', '<br>') %>...
+                                </div>
+                                <div class="counters"></div>
+                                <div class="buttons">
+                                    <button class="read_act_btn" >Đọc truyện</button> 
+                                    <button id="favorite_btn" class="act_btn">Yêu thích</button> 
+                                    <button id="un_favorite_btn" class="act_btn">Bỏ yêu thích</button>
+                                    <button id="follow_btn" class="act_btn">Theo dõi</button> 
+                                    <button id="un_follow_btn" class="act_btn">Bỏ theo dõi</button>
+                                    <button id="ebook_btn" class="act_btn">Tải truyện</button>
+                                </div>
+                            </div>
+                            <div class="right">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div>
+                        <button id="btnStoryDescription" class="tab__header active">
+                            Thông tin chi tiết
+                        </button>
+                        <button id="btnChaptersList" class="tab__header">Danh sách chương</button>
+                        <a href="#comments" class="tab__header">Bình luận</a>
+                        <button id="btnRatesList" class="tab__header">Đánh giá</button>
+                    </div>
+    
+                    <div>
+                        <div id="story_description" class="tab__content active"> 
+                            <%- meta.description.replaceAll('\n', '<br>') %>
+                        </div>
+                        <div id="chapters_list" class="tab__content">
+
+                            <div class="chapters_list_title">Các chương mới nhất</div>
+                            <ul>
+                                <% new_chapters.forEach(function(chapter){ %>
+                                    <li> <a href="/doc-truyen/<%= hash_name %>/<%= chapter.hash_name %>"> <%= chapter.name %> </a> </li>
+                                <% }) %>
+                            </ul>
+
+                            <div class="clear"></div>
+                            <div class="chapters_list_title">Danh sách chương (<%= chapters_count %> chương)</div>
+                            <ul class="chapters_list_content">
+                                <% chapters.forEach(function(chapter) { %>
+                                    <li> <a href="/doc-truyen/<%= hash_name %>/<%= chapter.hash_name %>"> <%= chapter.name %> </a> </li>
+                                <% }) %>
+                            </ul>
+                            
+                            <div class="clear"></div>
+                            <div class="paging">
+                                <a href="/doc-truyen/<%= hash_name %>/<%= chapters[0].hash_name %>">Chương đầu</a>
+                                <a href="/doc-truyen/<%= hash_name %>/<%= chapters[ chapters.length - 1 ].hash_name %>">Chương cuối</a>
+                            </div>
+                        </div>
+                        <div id="rate_list" class="tab__content">
+                            <center>
+                                <img class="img_rate" id="img_rate_1" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=1;img_rate()">
+                                <img class="img_rate" id="img_rate_2" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=2;img_rate()">
+                                <img class="img_rate" id="img_rate_3" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=3;img_rate()">
+                                <img class="img_rate" id="img_rate_4" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=4;img_rate()">
+                                <img class="img_rate" id="img_rate_5" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=5;img_rate()">
+                                <img class="img_rate" id="img_rate_6" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=6;img_rate()">
+                                <img class="img_rate" id="img_rate_7" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=7;img_rate()">
+                                <img class="img_rate" id="img_rate_8" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=8;img_rate()">
+                                <img class="img_rate" id="img_rate_9" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=9;img_rate()">
+                                <img class="img_rate" id="img_rate_10" src="/imgs/icons/star-on.png" alt="" onclick="s_rates=10;img_rate()">
+                                <br>
+                                <input type="text" placeholder="Nhập lời bình ...">
+                                <button id="rate_btn" disabled>Gửi</button>
+                                
+                            </center>
+                            
+                        </div>
+                        <p id="rate_message"></p>
+                    </div>
+                    <div class="clear"></div>
+                    <div id="comments">
+                        <div class="chapters_list_title">Danh sách bình luận</div>
+                        <!-- //TODO: Cần làm chức năng bình luận (cho người dùng đã đăng ký) -->
+                        <table id="comment_typing">
+                            <tr>
+                                <td rowspan="2" style="width:50px">
+                                    <img id="comment_img" src="https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg" alt="">
+                                </td>
+                                <td id="full_name">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="comment_box" placeholder="Thêm bình luận...">
+                                    <button  id="comment_btn">Bình luận</button>
+                                </td>
+                                
+                            </tr>
+                        </table>
+                        <div id="login_alert">
+                            Vui lòng <a href="/login">Đăng nhập</a> hoặc <a href="/register">Đăng kí</a> để bình luận !
+                        </div>
+                        <div id="comment_zone" style="color: #666;">
+                            <% comment.forEach(function(comment) { %>
+                            <table class="">
+                                <tr>
+                                    <td rowspan="3" style="width:50px">
+                                        <img id="comment_img" src="https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg" alt="">
+                                    </td>
+                                    <td class="full_name">
+                                        <%= comment.fullname %>
+                                    </td>
+                                    <td rowspan="3">
+                                        <div style="display:none" class="<%= comment.username %>">
+                                            <button class="edit" value="<%= comment.comment_id %>" onclick="comment_id = <%= comment.comment_id %>">
+                                                <img src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-pencil-icon-for-your-project-png-image_4813301.jpg" alt="">
+                                            </button>
+                                            <button class="remove" value="<%= comment.comment_id %>" onclick="comment_id = <%= comment.comment_id %>">
+                                                <img src="https://png2.cleanpng.com/sh/d85ec774186574e6401fad8a99fd3032/L0KzQYm3VsE3N5RqfpH0aYP2gLBuTgJ2apNui9o2Ynnxg37AggN1bV51eeJucj3lccTyhgR0NZR0heJAdHX1PbrqjB50NZ1ukNG2NXK1RbS3UfIyPZc4SaI3OUK5Roa7UccyPWMASqI5Nka6QImCWb5xdpg=/kisspng-rubbish-bins-waste-paper-baskets-computer-icons-lixo-5b25c01b15f310.9266541715292006670899.png" alt="">
+                                            </button>    
+                                        </div>
+                                        </td>
+                                </tr>
+                                <tr>
+                                    <td class="comment_content">
+                                        <%= comment.comment_content %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="react">
+                                        <a href="#like" id="like">Thích</a>
+                                        <a href="#reply" id="reply">Trả lời</a>
+                                        <span class="time"><%= comment.created_at %></span>
+                                        
+                                        <% if(comment.updated_at == null){ %>
+                                            <%
+                                        }else{
+                                            %>
+                                                <span style="margin-left:15px">Đã chỉnh sửa.</span>
+                                            <%
+                                        } %>
+
+                                    </td>
+                                    
+                                </tr>
+                            </table>
+
+                                    
+                                    <br>
+                                    
+
+                                
+                                <% }) %>
+                            
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>        
+    </div>
+    
+    
+    <script>
+        const timeClass = document.querySelectorAll('.time');
+        timeClass.forEach(i =>{
+            let time_val = i.innerHTML
+            console.log(moment(time_val).format('hh:mm DD-MM-YYYY'));
+            let time_changer = moment(time_val).format('hh:mm DD-MM-YYYY');
+            i.textContent = time_changer
+        })
+        let comment_id;
+        let rate_html = Math.round(<%= meta.rate %>*100)/100;
+        $('#rate_content').html(rate_html);
+        let s_rates;
+        let fullname = localStorage.getItem('fullname');
+        let hash_name = $('#hash').html();  
+        $(`.${username}`).show();
+        if(logincheck==0){
+            $('#comment_typing').hide();
+            $('#login_alert').show();
+            $('#un_favorite_btn').hide();
+            $('#favorite_btn').hide();
+            $('#un_follow_btn').hide();
+            $('#follow_btn').hide();
+            
+        }else{
+            $('#comment_typing').show()
+            $('#login_alert').hide()
+        }
+        function img_rate(){
+            $('.img_rate').attr('src','http://static.8cache.com/lib/raty/images/star-off.png');
+            for(let i=1;i<=s_rates;i++){
+                $(`#img_rate_${i}`).attr('src','/imgs/icons/star-on.png');
+            }
+            $('#rate_btn').removeAttr('disabled');
+            $('#rate_btn').css('background-color','#04AA6D');
+        }
+        
+
+        
+        //Đánh giá
+
+        $('#rate_show_btn').on('click', function(){
+
+        })
+        $('#rate_btn').on('click', function(){
+            console.log(s_rates)
+            $.ajax({
+                type: 'POST',
+                url: `/api/stories/rate`,
+                data:{
+                    hash_name:hash_name,
+                    username:username,
+                    s_rates:s_rates
+                },
+                success:function(data){
+                    history.go(0)
+                }
+            })
+        })
+        // Kiểm tra xem đã Theo dõi hay chưa
+        $.ajax({
+            type: 'POST',
+            url: `/api/stories/fv_check`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+            data: {
+                username: username,
+                hash_name:hash_name
+            },
+            success: function(data) {
+                if(logincheck==1){
+                    if(data.status){
+                        $('#favorite_btn').show();
+                        $('#un_favorite_btn').hide();
+                    }else{
+                        $('#favorite_btn').hide();
+                        $('#un_favorite_btn').show();
+                    }
+                }
+                
+            }
+        });
+        //test
+        // Kiểm tra xem đã đánh giá hay chưa
+        $.ajax({
+            type: 'POST',
+            url: `/api/stories/rate_check`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+            data: {
+                username: username,
+                hash_name:hash_name
+            },
+            success: function(data) {
+                if(logincheck==1){
+                    if(data.status){
+                        
+                    }else{
+                        $('#rate_list').hide();
+                        
+                    }
+                }
+                
+            }
+        });
+        //Kiểm tra xem đã Follow hay chưa
+        $.ajax({
+            type: 'POST',
+            url: `/api/stories/fl_check`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+            data: {
+                username: username,
+                hash_name:hash_name
+            },
+            success: function(data) {
+                if(logincheck==1){
+                    if(data.status){
+                        $('#follow_btn').show();
+                        $('#un_follow_btn').hide();
+                    }else{
+                        $('#follow_btn').hide();
+                        $('#un_follow_btn').show();
+                    }
+                }
+                
+            }
+        });
+        //Nút bình luận
+        $('#comment_btn').on('click', function() {
+            // phải lấy giá trị của textboxx khi mà click
+            let comment_content = $('#comment_box').val();
+            //Comment send
+            $.ajax({
+                type: 'POST',
+                url: `/api/comment/sendcomment`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: {
+                    username: username,
+                    comment_content: comment_content,
+                    hash_name:hash_name
+                },
+                success: function(resultData) {
+                    history.go(0)
+                }
+            });
+        });
+        //Nút xóa bình luận
+        $('.remove').on('click', function() {
+            if(confirm("Bạn chắc chắn muốn xóa bình luận ?")==true){
+                $.ajax({
+                type: 'POST',
+                url: `/api/comment/removecomment`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: {
+                    comment_id: comment_id
+                },
+                success: function(resultData) {
+                    history.go(0)
+                }
+            });
+            }
+        });
+        //Nút sửa bình luận
+        $('.edit').on('click', function() {
+            let edited_comment = prompt("Nhập bình luận: ");
+            if(edited_comment!=null){
+                $.ajax({
+                type: 'POST',
+                url: `/api/comment/editcomment`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: {
+                    comment_id: comment_id,
+                    edited_comment: edited_comment
+                },
+                success: function(resultData) {
+                    history.go(0)
+                }
+            });
+            }
+        });
+        // Nút yêu thích
+        $('#favorite_btn').on('click', function() {
+            $.ajax({
+                type: 'POST',
+                url: `/api/stories/send_fv_stories`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: {
+                    username: username,
+                    hash_name:hash_name
+                },
+                success: function(data) {
+                    history.go(0)
+                }
+            });
+        });
+        // Nút hủy yêu thích
+        $('#un_favorite_btn').on('click', function() {
+            $.ajax({
+                type: 'POST',
+                url: `/api/stories/remove_fv_stories`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: {
+                    username: username,
+                    hash_name:hash_name
+                },
+                success: function(data) {
+                    history.go(0)
+                }
+            });
+        });
+        // Nút theo dõi
+        $('#follow_btn').on('click', function() {
+            $.ajax({
+                type: 'POST',
+                url: `/api/stories/send_fl_stories`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: {
+                    username: username,
+                    hash_name:hash_name
+                },
+                success: function(data) {
+                    history.go(0)
+                }
+            });
+        });
+        // Nút hủy theo dõi
+        $('#un_follow_btn').on('click', function() {
+            $.ajax({
+                type: 'POST',
+                url: `/api/stories/remove_fl_stories`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: {
+                    username: username,
+                    hash_name:hash_name
+                },
+                success: function(data) {
+                    history.go(0)
+                }
+            });
+        });
+        // Nút tải truyện
+        $('#ebook_btn').on('click',function(){
+            $.ajax({
+                type: 'POST',
+                url: `/api/story/ebook/`,
+                data: {
+                    hash_name:hash_name,
+                },
+                success: function(data){
+                    if(data.status){
+                        alert(data.message);
+                    }else{
+                        window.location.href = data.link;
+                    }
+                }
+            })
+        })
+        
+        $(document).ready(function() {
+            
+            $('#full_name').html(fullname);
+            let story_hash_name = '<%= hash_name %>'
+            { // tabs
+                $('#btnStoryDescription').click(function() {  
+                    $('.tab__header').removeClass('active')
+                    $('#btnStoryDescription').addClass('active')
+
+                    $('.tab__content').removeClass('active')
+                    $('#story_description').addClass('active')
+                })
+
+                $('#btnChaptersList').click(function() {
+                    $('.tab__header').removeClass('active')
+                    $('#btnChaptersList').addClass('active')
+                    
+                    $('.tab__content').removeClass('active')
+                    $('#chapters_list').addClass('active')
+                })
+                $('#btnRatesList').click(function(){
+                    $('.tab__header').removeClass('active')
+                    $('#btnRatesList').addClass('active')
+
+                    $('.tab__content').removeClass('active')
+                    $('#rate_list').addClass('active')
+                })
+            }
+
+            { // paging
+                let n_chapters = '<%= chapters_count %>'
+                const page_size = 30;
+                let current_page = 1;
+                let n_pages = Math.ceil( 1.0 * n_chapters / page_size );
+
+                function generatePagingButtons() {
+                    let start_page = current_page - 5;
+                    if (start_page < 1) { start_page = 1; }
+
+                    let end_page = current_page + 5;
+                    if (end_page > n_pages) { end_page = n_pages; }
+
+                    let html = ''
+                    for (let page = start_page; page <= end_page; page ++) {
+                        html += `<a page="${page}" class="${ page == current_page? 'active': '' }" >${page}</a>`
+                    }
+                    $('.paging').html(html)
+
+                    $('.paging a').click(function() {
+                        let page_want_to_go = $(this).attr('page')
+                        if (page_want_to_go === current_page) { return; }
+                        
+                        console.log('page_want_to_go', page_want_to_go )
+                        
+                        $.ajax({
+                            url: `/api/chapters_list/${story_hash_name}?limit=${page_size}&skip=${ (page_want_to_go - 1) * page_size }`,
+                            success: function(data) {
+                                current_page = page_want_to_go
+                                
+                                let html = ''
+                                
+                                data.forEach(function(chapter) {
+                                    html += `
+                                        <li> <a href="/doc-truyen/${story_hash_name}/${chapter.hash_name}"> ${ chapter.name } </a> </li>
+                                    `
+                                })
+
+                                $('.chapters_list_content').html(html);
+
+                                generatePagingButtons()
+                            }
+                        })
+                    })
+                }
+                generatePagingButtons()
+            }
+        })
+        
+    </script>
+
+    <%- include('footer.html') -%>
+</body>
+</html>
+
+

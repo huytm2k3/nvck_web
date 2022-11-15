@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head.html') -%>
+<style>
+    /* body.day .wrapper #register_div{
+        width: 500px;
+        height: 400px;
+        background: white;
+    }
+    body.night .wrapper #register_div{
+        width: 500px;
+        height: 400px;
+        background: rgba(255,255,255,0.1);
+        
+    } */
+    .form-wrapper{
+        width: 300px;
+        margin: auto;
+        background: white;
+        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        height: 450px;
+        padding: 50px;
+    }
+    .form-wrapper .top{
+        text-align: center;
+        font-weight: 600;
+        font-size: 32px;
+        height: 70px;
+    }
+    .form-wrapper #error_message{
+        font-size: 12px;
+        color: red;
+        display: none;
+    }
+    .form-wrapper .middle{
+        height: 230px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .form-wrapper .middle input{
+        outline: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        width: 100%;
+        padding: 8px 0;
+    }
+    .form-wrapper .middle button{
+        height: 50px;
+    }
+    .form-wrapper .bottom {
+        text-align: center;
+        color: grey;
+    }
+    .form-wrapper .bottom a{
+        color: grey;
+        font-weight: 600;
+    }
+</style>
+<body>
+    <%- include('header.html') -%>
+    <div class="wrapper">
+        <div class="form-wrapper">
+            <div class="top">
+                Login
+            </div>
+            <div class="middle">
+                <p id="error_message">Thông tin tài khoản hoặc mật khẩu không chính xác.</p>
+                <br>
+                <input id="username" type="text" placeholder=" Username">
+                <br>
+                <input id="password" type="password" placeholder=" Password">
+                <br>
+                <button id="Register_btn">Đăng nhập</button>
+            </div>
+            <div class="bottom">
+                <span class="register-sms">Don't have an account?</span>
+                <a href="/register">Sign Up</a>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        // nễu lấy ở đây thì sẽ là trắng, vì vừa vào ttrangweb nó đã lấy giá trị thì chưa có gì
+
+        $('#Register_btn').on('click', function() {
+            // phải lấy giá trị của textboxx khi mà click
+            let username = $('#username').val();
+            let password = $('#password').val();
+            function hide_message(){
+                $('#error_message').hide()
+            }
+            $.ajax({
+                type: 'POST',
+                url: `/api/users/login/`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: { 
+                    username: username,
+                    password: password
+                },
+                success: function(resultData) {
+                    if(resultData.status){
+                        console.log('Thông tin tài khoản hoặc mật khẩu không chính xác')
+                        console.log(resultData.status)
+                        $('#error_message').show()
+                        setTimeout(hide_message,3000)
+                    }else{
+                        console.log(`Xin chao ${resultData.username}`)
+                        window.location.href = '/'
+                        localStorage.setItem("username",`${resultData.username}`)
+                        localStorage.setItem("logincheck",1)
+                        localStorage.setItem("fullname",`${resultData.fullname}`)
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

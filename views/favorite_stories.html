@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('head.html') -%>
+    <style>
+        #title_fv{
+            border-bottom: solid 0.5px grey;
+            font-size:25px;
+            padding-top: 25px;
+        }
+        #fv_stories .str{
+            margin-top: 30px;
+            border-bottom: solid 0.1px grey;
+            
+            width: 85%;
+            font-size: 20px;
+            color:#4E4E4E;
+            font-weight: bold;
+            margin-left: 7.5%;
+        }
+        #fv_stories .author_name{
+            font-size: 15px;
+            text-align: right;
+        }
+        #fv_stories{
+            float:left;
+            width: 500px;
+            margin-top: 50px;
+            border-radius: 20px;
+        }
+        #right_area{
+            float:left;
+            width: 400px;
+            background-color: white;
+            height: 1000px;
+            margin-left: 100px;
+            margin-top: 50px;
+        }
+        #right_area .head{
+            height: 50px;
+            width: 100%;
+            background-color: rgb(198, 99, 88);
+        }
+        #right_area .head h1{
+            text-align: center;
+            color: white;
+            padding-top: 7px;
+        }
+        #fv_stories .str_name{
+            padding-bottom: 10px;
+        }
+        #fl_stories{
+            padding-top: 20px;
+            padding-left:20px;
+        }
+        .bg1{
+            background-color:rgba(255,255,255,0.05);
+            padding-right: 10px;
+        }
+        .bg1 img{
+            object-fit: cover;
+            object-position: 50% 50%;
+            width: 120px;
+            height: 80px;
+        }
+        .bg1 td{
+            color:#3d3d3d;
+            font-weight: bold;
+        }
+        .bg1:hover{
+            filter: opacity(70%);
+            transition:0.5s;
+        }
+    </style>
+</head>
+<body>
+    <%- include('header.html') -%>
+    <div id="content">
+        <div class="wrapper">
+            <div id="title_fv">Truyện yêu thích</div>
+            <div id="fv_stories">
+
+            </div>
+            <div id="right_area">
+                <div class="head">
+                   <h1>Đang theo dõi</h1>
+                   <div id="fl_stories">
+
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('footer.html') -%>
+    <script>
+        let html1='';
+        let html2='';
+        $.ajax({
+                type: 'POST',
+                url: `/api/stories/favorite/`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: { 
+                    username: username
+                },
+                success: function(data) {
+                    data.forEach(function(fv_story) {
+                        html1 += `
+                                <a href="/doc-truyen/${fv_story.hash_name}/">
+                                    <div id="index_story_name" class="str">
+                                        <p class="str_name">&#10173; ${ fv_story.name }</p>
+                                        <p class="author_name">- ${fv_story.author_name} -</p>
+                                    </div>
+                                </a>
+                        `
+                    })
+
+                        $('#fv_stories').html(html1);
+                }
+            });
+        $.ajax({
+            type: 'POST',
+            url: `/api/stories/follow/`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+            data: { 
+                username: username
+            },
+            success: function(data) {
+                data.forEach(function(fv_story) {
+                    if(`${fv_story.current_chapter_hash_name}`=='null'){
+                        html2 += `
+                            <div class="bg1">
+                                <a href="/doc-truyen/${fv_story.hash_name}/chuong-1">
+                                <div class="bg2" style="margin-bottom: 16px;">
+                                    <table> 
+                                        <tr>
+                                            <th rowspan="3"><img style="" src="${fv_story.image}" alt=""></th>
+                                            <td><p style="font-size:20px;">${ fv_story.name }</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p style="font-style:italic;">${fv_story.author_name}</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chương 1</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                </a>
+                            </div>
+                        `
+                    }else{
+                        html2 += `
+                            <div class="bg1">
+                                <a href="/doc-truyen/${fv_story.hash_name}/${fv_story.current_chapter_hash_name}">
+                                <div class="bg2" style="margin-bottom: 16px;">
+                                    <table> 
+                                        <tr>
+                                            <th rowspan="3"><img style="" src="${fv_story.image}" alt=""></th>
+                                            <td><p style="font-size:20px;">${ fv_story.name }</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p style="font-style:italic;">${fv_story.author_name}</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td>${fv_story.current_chapter}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                </a>
+                            </div>
+                        `
+                    }
+                    
+                })
+
+                $('#fl_stories').html(html2);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<header>
+    <style>
+    #setting_wrap{
+        position: absolute;
+        width: 270px;
+        background-color: rgba(255,255,255,0.8);
+        right: 0px;
+        z-index: 2;
+        display: none;    
+        padding: 8px 16px;
+        color:black;
+        font-weight: bold;
+    }
+
+    #setting_wrap table select{
+        width: 150px;
+        padding: 4px 10px;
+        background: white;
+    }
+    #setting_wrap table input {
+        background: white;
+        width: 128px;
+        padding: 4px 10px;
+        font-weight: bold;
+        height: 20px;
+        border:solid 0.3px rgb(118, 118, 118);
+    }
+    body.night{
+        background: url(https://static.8cache.com/img/bg_dark.gif);
+    }
+    body.day{
+        background: url(//static.8cache.com/img/bg.jpg) top center repeat-x #F4F4F4;
+        color: #4E4E4E;
+    }
+    body.day .str{
+        color:black;
+    }
+    body.night .str{
+        color:white;
+    }
+    #config:hover{
+        cursor: pointer;
+        background-color: white;
+    }
+    body.day .chapter_content{
+        color:black;
+    }
+    body.night .chapter_content{
+        color:white;
+    }
+    #searchContent img{
+        object-fit: cover;
+        object-position: 50% 50%;
+        width: 180px;
+        height: 80px;
+        padding-top:5px;
+        padding-left:5px;
+    }
+    #searchContent td{
+        padding-left: 100px;
+    }
+    body.day #searchContent td{
+        color:#4E4E4E;
+        font-weight: bold;
+    }
+    body.night #searchContent td{
+        color:#b1b1b1;
+        font-weight: bold;
+    }
+    #searchContent .bg1{
+        background-color:rgba(255,255,255,0.05)
+    }
+    body.night #searchTitle{
+        color:white;
+        font-weight: none;
+    }
+    
+    #txtSearchBox::placeholder{
+        color:grey !important;
+    }
+    .top .wrapper #btnSearch{
+        color: #55BCC9;
+        text-shadow: 1px 1px 0 rgb(10 10 10 / 40%);
+        margin-left:0px;
+        background-color: rgba(168, 167, 167, 0.582);
+        padding: 3.5px;
+    }
+    .top .wrapper #btnSearch img{
+        width: 30px;
+        float: left;
+        height: 30px;
+    }
+    .menu #cate{
+        position: absolute;
+        width: 120px;
+        background-color: rgba(255,255,255,0.8);
+        right: 0px;
+        z-index: 2;
+        padding: 8px 16px;
+        display:none;
+    }
+    .menu #cate ul{
+        color:black;
+    }
+    .middle li:hover{
+        background-color: rgba(255,255,255,0.8);
+    }
+    .top .wrapper #search_wrapper{
+        background-color: white;
+        width: 149px;
+        float:left;
+        margin-left:calc(100% - 250px);
+        height: 37px;
+    }
+    </style>
+    
+    <div class="top">
+        <div class="wrapper">
+            <h1><a href="/" style="display:absolute">NVCK</a></h1>
+            <div id="search_wrapper">
+                <input id="txtSearchBox" type="text" placeholder="Tìm kiếm"> 
+                <button id="btnSearch"><img src="https://png2.cleanpng.com/sh/86660df5bd14dc962ed98c95215fe5b2/L0KzQYm3VMIyN5ZBiZH0aYP2gLBuTf1ib59ufutybnewd73okCMua5DyiOd9ZYKwebT2jwMua51uiJ9qcoSwRbLrgvEzPGo6TtQAM0ixRoa9VMcxPGc2TaQ9M0S2Q4eCU8U2Ol91htk=/kisspng-magnifying-glass-computer-icons-clip-art-5adba24956b538.6564704615243433693552.png" alt=""></button>
+            </div>
+        </div>
+        
+    </div>
+    <div class="clear"></div>
+
+    <div class="middle">
+        <div class="wrapper">
+            <ul class="menu">
+                
+                <li>
+                    Danh Mục
+                </li>
+                <a href="/stories/favorite_stories">
+                    <li>
+                        Yêu thích
+                    </li>
+                </a>
+                
+                <li onmouseover="show_cate()" onmouseout="hide_cate()">
+                    <span id="cate_btn">Thể loại</span>
+                    <div id="cate">
+                        <ul>
+                        <% 
+                        let categories = [
+                            {name: 'Tiên hiệp', hash_name: 'tien-hiep'},
+                            {name: 'Huyền huyễn', hash_name: 'huyen-huyen'},
+                            {name: 'Đô thị', hash_name: 'do-thi'},
+                            {name: 'Khoa huyễn', hash_name: 'khoa-huyen'},
+                            {name: 'Kỳ huyễn', hash_name: 'ky-huyen'},
+                            {name: 'Võ hiệp', hash_name: 'vo-hiep'},
+                            {name: 'Lịch sử', hash_name: 'lich-su'},
+                        ];
+                        categories.forEach(function(category){ %>
+
+                        <li>
+                            <a href="/the-loai/<%= category.hash_name %>"> <%= category.name %> </a>
+                        </li>
+                        
+    
+                         <% }) %>
+                    </ul>   
+                    </div>
+                </li>
+                <li>
+                    Liên Hệ
+                </li>
+                <li id="menuConfig">
+                    <span>Tùy chỉnh</span>
+
+                    <div id="setting_wrap">
+                        <table>
+                            <tr>
+                                <td width="100" style="width: 100px;">
+                                    <span>Giao diện:</span>
+                                </td>
+                                <td>
+                                    <select name="" id="config_bg">
+                                        <option value="day">Sáng</option>
+                                        <option value="night">Tối</option>
+                                    </select>
+                                </td>
+                            </tr><tr>
+                                <td><span>Font chữ:</span></td>
+                                <td><select name="" id="font_config">
+                                    <option value="Arial">Arial</option>
+                                    <option value="Palatino Linotype">Palatino Linotype</option>
+                                    <option value="Bookerly">Bookerly</option>
+                                    <option value="Segoe UI">Segoe UI</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Tahoma">Tahoma</option>
+                                    <option value="Noticia Text">Noticia Text</option>
+                                </select></td>
+                            </tr><tr>
+                                <td><span>Size chữ:</span></td>
+                                <td>
+                                    <input id="fontsize_config" type="text">
+                                </td>
+                            </tr><tr>
+                                <td><span>KC dòng: </span></td>
+                                <td>
+                                    <select name="" id="lineheight_config">
+                                        <option value="1.0">100%</option>
+                                        <option value="1.2">120%</option>
+                                        <option value="1.4">140%</option>
+                                        <option value="1.6">160%</option>
+                                        <option value="1.8">180%</option>
+                                        <option value="2.0">200%</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button id="btnSaveConfig">Lưu</button>
+                                    <button id="closeConfigPanel">Hủy</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </li>
+                <span id="log_div">
+                    <li>
+                        <a href="/login">Đăng nhập</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/register">Đăng kí</a>
+                    </li>
+                </span>
+                <span id="user_div">
+                    <li id="user_display"></li>
+                    <li id="logout_btn">Đăng xuất</li>
+                </span>
+                
+            </ul>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="wrapper" style="text-align: center;">
+            Đọc truyện online - offline - tải truyện - tìm kiếm
+        </div>
+    </div>
+    <div class="info_port">
+        <div class="wrapper">
+        </div>
+    </div>
+    <div>
+        <div class="wrapper">
+            <h1 id="searchTitle"></h1>
+            <div id="searchContent">
+            </div>
+        </div>
+    </div>
+    <script>
+        let username = localStorage.getItem('username');
+        let logincheck = localStorage.getItem('logincheck');
+        if(logincheck==1){
+            $('#log_div').hide();
+            $('#user_div').show();
+            $('#user_display').html(username);
+        }else{
+            $('#log_div').show();
+            $('#user_div').hide();
+        }
+        function show_cate(){
+            $('#cate').show();
+        }
+        function hide_cate(){
+            $('#cate').hide();
+        }
+        function unAccent(str) {
+            str = str.toLowerCase();
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+            str = str.replace(/đ/g,"d");
+            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+            str = str.replace(/Đ/g, "D");
+            return str;
+        };
+        let str_Normalize;
+            $('#btnSearch').click(function(){
+                str_Normalize = unAccent($('#txtSearchBox').val())
+                window.location.href='/stories/search?keyword='+ str_Normalize +'&skip=0&limit=5'+'&category=tat-ca'+'&status=tat-ca';
+            })
+            { // config theme
+                function Check_Themes(){
+                    let flat = localStorage.getItem('flat');
+                    if(flat=='true'){
+                        let theme = localStorage.getItem('theme');
+                        let font_style = localStorage.getItem('font-style');
+                        let font_size = localStorage.getItem('font-size');
+                        let line_height = localStorage.getItem('line-height');
+                        $('body').removeClass();
+                        $('body').addClass(theme);
+                        $('.chapter_content').css('font-family', font_style);
+                        $('.chapter_content').css('font-size', font_size);
+                        $('.chapter_content').css('line-height', line_height);
+                        console.log(line_height);
+                    }
+                }
+                Check_Themes();
+
+                function night_config() {
+                    $('body').removeClass('day');
+                    $('body').addClass('night');
+                }
+                
+                function day_config() {
+                    $('body').removeClass('night');
+                    $('body').addClass('day');
+                }
+
+                function check_config() {
+                    localStorage.setItem('flat',true);
+                    if ($('#config_bg').val() == 'day'){
+                        day_config();
+                        localStorage.setItem('theme','day');
+                    } else {
+                        night_config();
+                        localStorage.setItem('theme','night');
+                    }
+                    localStorage.setItem('font-style',$('#font_config').val());
+                    localStorage.setItem('font-size',$('#fontsize_config').val());
+                    localStorage.setItem('line-height',$('#lineheight_config').val());
+                    // Nếu muốn cái này hoạt động hắn phải thêm font vào  css
+                    $('.chapter_content').css('font-family', $('#font_config').val());
+                    $('.chapter_content').css('font-size', $('#fontsize_config').val() + 'px');
+                    $('.chapter_content').css('line-height', $('#lineheight_config').val());       
+                }
+
+                $('#menuConfig').mouseover(function() {
+                    console.log('show')
+                    $('#setting_wrap').show();
+                })
+                $('#menuConfig').mouseout(function() {
+                    console.log('show')
+                    $('#setting_wrap').hide();
+                })
+                $('#btnSaveConfig').click( function() {
+                    check_config();
+                    $('#setting_wrap').hide();
+                })
+
+                $('#closeConfigPanel').click( function() {
+                    console.log('close')
+                    $('#setting_wrap').hide();
+                })
+            }
+            
+            
+            $('#txtSearchBox').on('keypress', function (e) {
+                if(e.which === 13){
+                    $('#btnSearch').click()
+                }
+            });
+            $('#logout_btn').click(function(){
+                localStorage.setItem('logincheck',0);
+                localStorage.removeItem('username');
+                window.location.href='/';
+                console.log('ok')
+            })
+    </script>
+    
+</header>

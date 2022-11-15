@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head.html') -%>
+<style>
+    
+    
+</style>
+<body id="body" class="day_index">
+    <%- include('header.html') -%>
+    <div id="content">
+        <div class="wrapper">
+            <div class="content_part">
+                <div id="wrap_h2"><h2>ĐÃ ĐỌC GẦN ĐÂY</h2></div>
+                <ul>
+                    
+                </ul>
+            </div>
+            <div class="clear"></div>
+            <div class="content_part">
+                <div id="wrap_h2"><h2>MỚI CẬP NHẬT</h2></div>
+                <ul>
+                    <% newest_stories.forEach(function(story){ %>
+                        <li><a href="/doc-truyen/<%= story.hash_name %>">
+                            <div id="story_imgs" >
+                                <img src="<%= story.image %>" alt="">
+                                <div id="index_story_name" class="str"><%= story.name %></div>
+                            </div>
+                        </a></li>
+                    <% }) %>
+                </ul>
+            </div>
+
+            <div class="clear"></div>
+    
+            <div class="content_part">
+                <div id="wrap_h2"><h2>NGẪU NHIÊN</h2></div>
+                <ul>
+                    <% random_stories.forEach(function(story){ %>
+                        <li><a href="/doc-truyen/<%= story.hash_name %>">
+                            <div id="story_imgs" >
+                                <img src="<%= story.image %>" alt="">
+                                <div id="index_story_name" class="str"><%= story.name %></div>
+                            </div>
+                        </a></li>
+                    <% }) %>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <%- include('footer.html') -%>
+    <!-- <script>
+        let html='';
+        $.ajax({
+                type: 'POST',
+                url: `/api/stories/favorite/`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: { 
+                    username: username
+                },
+                success: function(data) {
+                    data.forEach(function(fv_story) {
+                        html += `
+                            <li><a href="/doc-truyen/${fv_story.hash_name}">
+                            <div id="story_imgs" >
+                                <img src="${fv_story.image}" alt="">
+                                <div id="index_story_name" class="str">${ fv_story.name }</div>
+                            </div>
+                            </a></li>
+                        `
+                    })
+
+                        $('#fv_stories').html(html);
+                }
+            });
+    </script> -->
+</body>
+</html>
+
+

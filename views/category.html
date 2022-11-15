@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head.html') -%>
+<style>
+    #story_imgs:hover{
+        filter: opacity(70%);
+        transition:0.2s;
+        width:160px;
+    }
+    #index_story_name{
+        font-size:12px;
+        font-weight: bold;
+        text-align: center;
+    }
+    #wrap_h2{
+        height: 40px;
+        background-color:#c66358;
+    }
+    h2{
+        margin-top:5px;
+        padding: 8px 10px;
+        color:white;
+    }
+</style>
+<body id="body" class="day_index">
+    <%- include('header.html') -%>
+    <div id="content">
+        <div class="wrapper">
+            <!--  
+                Trang thể loại
+                TODO: Hiển thị tên của thể loại đang chọn
+                Hiển thị danh sách truyện thuộc thể loại này
+            -->
+
+            <h2 style="color: black;">Danh sách truyện của thể loại <%= category_hash_name %></h2>
+
+            <div class="content_part">
+                <div id="wrap_h2"><h2>Mới cập nhật</h2></div>
+                <ul>
+                    <% stories.forEach(function(story){ %>
+                        <li><a href="/doc-truyen/<%= story.hash_name %>">
+                            <div id="story_imgs" >
+                                <img src="<%= story.image %>" alt="">
+                                <div id="index_story_name" class="str"><%= story.name %></div>
+                            </div>
+                        </a></li>
+                    <% }) %>
+                </ul>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+    </div>
+    <%- include('footer.html') -%>
+</body>
+</html>
+
+

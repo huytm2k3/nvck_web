@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head.html') -%>
+<style>
+    #head_bg{
+        background-image:url('https://truyen.tangthuvien.vn/images/category/lich-su.jpeg');
+        width: 100%;
+        height: 120px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 50% -20px;
+    }
+    .bg1{
+        background-color:rgba(255,255,255,0.05)
+    }
+    .bg1 img{
+        object-fit: cover;
+        object-position: 50% 50%;
+        width: 180px;
+        height: 80px;
+        padding-top:5px;
+        padding-left:5px;
+    }
+    body.day .bg1 td{
+        padding-left: 50px;
+        color:rgb(48, 47, 47);
+        font-weight: bold;
+    }
+    body.night .bg1 td{
+        padding-left: 50px;
+        color:#b1b1b1;
+        font-weight: bold;
+    }
+    #wrapper_search{
+        padding-left: 100px;
+    }
+    body.night #find_keyword{
+        color:#b1b1b1;
+    }
+    body.day #find_keyword{
+        color:rgb(48, 47, 47);
+    }
+    .bg1:hover{
+        filter: opacity(70%);
+        transition:0.5s;
+        -webkit-transform: scale(1.1); transform: scale(1.1); 
+    }
+    #ds_bo_loc{
+        display: inline;
+    }
+    #ds_bo_loc li{
+        display:inline;
+        float:left;
+        margin-right: 2vw;
+    }
+    #left-wrapper{
+        float: left;
+        width: 300px;
+        padding-left: 100px;
+        padding-right: 100px;
+        padding-top: 60px;
+    }
+    .middle-wrapper{
+        float:left;
+        
+    }
+    body.day #left-wrapper .title{
+        padding-bottom: 15px;
+        padding-top: 20px;
+        border-bottom: solid rgb(48, 47, 47) 0.1px;
+    }
+    body.night #left-wrapper .title{
+        padding-bottom: 15px;
+        padding-top: 20px;
+        border-bottom: solid white 0.1px;
+        color:white;
+    }
+    #left-wrapper .btn_wrapper{
+        padding-top: 15px;
+        
+    }
+    #left-wrapper .btn_wrapper button{
+        background-color: white;
+        color:black;
+        font-size: 18px;
+        margin-top: 10px;
+        height: 40px;
+        padding: 5px;
+    }
+    #boloc_title{
+        padding-top: 10px;  
+        font-size: 28px;
+    }
+    body.night #boloc_title{
+        color:#b1b1b1;
+    }
+    .wrapper #ds_bo_loc{
+        font-size: 14px;
+        font-weight: bold;
+        overflow-y: auto;
+        width: 100px;
+    }
+    #div_ds{
+        
+    }
+    body.day #div_ds{
+        padding-top:10px;
+        color:black;
+    }
+    body.night #div_ds{
+        padding-top:10px;
+        color:#b1b1b1;
+    }
+    .wrapper #result-wrapper{
+        padding-top: 30px;
+    }
+    body.day .category_option{
+        color:black;
+    }
+    body.night .category_option{
+        color:#b1b1b1;   
+    }
+</style>
+<body>
+    <%- include('header.html') -%>
+    <div id="head_bg">
+    </div>
+    <div id="left-wrapper">
+        <div class="title">Tình trạng</div>
+        <div class="btn_wrapper">
+            <button id="tat-ca-status" onclick="window.location.href = '/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=<%=category%>&status=tat-ca'">Toàn bộ</button>
+            <button id="dang-ra-status" onclick="window.location.href = '/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=<%=category%>&status=dang-ra'">Đang ra</button>
+            <button id="full-status" onclick="window.location.href = '/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=<%=category%>&status=full'">Full</button>
+        </div>
+        <div class="title">Thể loại</div>
+        <div class="btn_wrapper">
+            <button>Toàn bộ</button>
+            <button>Truyện Convert</button>
+            <button>Truyện Dịch</button>
+            <button>Truyện Sáng tác</button>
+        </div>
+        
+        <div class="title">Xếp hạng</div>
+        <div class="btn_wrapper">
+            <button>Không xếp hạng</button>
+            <button>Xem nhiều</button>
+            <button>Đề cử</button>
+            <button>Yêu thích</button>
+            <button>Theo dõi</button>
+            <button>Bình luận</button>
+        </div>
+        
+        <div class="title">Số chương</div>
+        <div class="btn_wrapper">
+            <button>Toàn bộ</button>
+            <button>< 300</button>
+            <button>300 - 1000</button>
+            <button>1000 - 2000</button>
+            <button>> 2000</button>
+        </div>
+        
+    </div>
+    <div class="wrapper" class="midle-wrapper">
+        <br>
+        <h1 id="find_keyword">Tìm kiếm với từ khóa: <%= keyword %> </h1>
+        <p id="category" style="display:none;"><%=category%></p>
+        <p id="status" style="display:none;"><%=status%></p>
+
+        <h2 id="boloc_title">Bộ lọc</h2>
+        <div id="div_ds">
+            <ul id="ds_bo_loc">
+                <li><a class="category_option" href="/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=tat-ca&status=<%= status %>" id="tat-ca">Tất cả</a></li>
+                <li><a class="category_option" href="/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=tien-hiep&status=<%= status %>" id="tien-hiep">Tiên hiệp</a></li>
+                <li><a class="category_option" href="/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=huyen-huyen&status=<%= status %>" id="huyen-huyen">Huyền huyễn</a></li>
+                <li><a class="category_option" href="/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=do-thi&status=<%= status %>" id="do-thi">Đô thị</a></li>
+                <li><a class="category_option" href="/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=khoa-huyen&status=<%= status %>" id="khoa-huyen">Khoa huyễn</a></li>
+                <li><a class="category_option" href="/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=ky-huyen&status=<%= status %>" id="ky-huyen">Kỳ huyễn</a></li>
+                <li><a class="category_option" href="/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=vo-hiep&status=<%= status %>" id="vo-hiep">Võ hiệp</a></li>
+                <li><a class="category_option" href="/stories/search?keyword=<%= keyword %>&skip=0&limit=5&category=lich-su&status=<%= status %>" id="lich-su">Lịch sử</a></li> 
+            </ul>
+        </div>
+        
+        <br>
+        <div id="result-wrapper">
+            <% result_story.forEach(function(story){ %>
+                <div class="bg1">
+                    <a href="/doc-truyen/<%= story.hash_name %>">
+                    <div class="bg2" style="margin-bottom: 16px;">
+                        <table> 
+                            <tr>
+                                <th rowspan="3"><img src="<%= story.image %>" alt=""></th>
+                                <td><p style="font-size:20px;"><%= story.name %></p></td>
+                            </tr>
+                            <tr>
+                                <td><p style="font-style:italic;"><%= story.author_name %></p></td>
+                            </tr>
+                            <tr>
+                                <td><%= story.status %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    </a>
+                </div>
+            <% }) %>
+        </div>
+        <div class="paging">
+        </div>
+        
+    </div>
+    <%- include('footer.html') -%>
+    <script>
+        { // paging
+                let n_stories = <%= n_stories %>;
+                const page_size = 5;
+                let current_page = (<%= skip %>/5)+1;
+                let n_pages = Math.ceil( 1.0 * n_stories / page_size );
+                let current_category = $('#category').html();
+                let current_status = $('#status').html();
+                console.log('n_pages', n_pages)
+
+                function generatePagingButtons() {
+                    let start_page = current_page - 5;
+                    if (start_page < 1) { start_page = 1; }
+
+                    let end_page = current_page + 5;
+                    if (end_page > n_pages) { end_page = n_pages; }
+
+                    let html = ''
+                    for (let page = start_page; page <= end_page; page ++) {
+                        html += `<a href="/stories/search?keyword=<%= keyword %>&skip=${(page-1)*page_size}&limit=${page_size}&category=<%= category %>&status=<%= status %>" page="${page}" class="${ page == current_page? 'active': '' }" >${page}</a>`
+                    }
+                    $('.paging').html(html)
+                    $(`#${current_category}`).css('color','red')
+                    $(`#${current_status}-status`).css('color','red')
+                    $(`#${current_status}-status`).css('border-color','red')
+
+                }
+                generatePagingButtons()
+            }
+            
+    </script>
+        
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head.html') -%>
+<style>
+    /* body.day .wrapper #register_div{
+        width: 500px;
+        height: 400px;
+        background: white;
+    }
+    body.night .wrapper #register_div{
+        width: 500px;
+        height: 400px;
+        background: rgba(255,255,255,0.1);
+        
+    } */
+    .form-wrapper{
+        width: 300px;
+        margin: auto;
+        background: white;
+        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        height: 550px;
+        padding: 50px;
+    }
+    .form-wrapper .top{
+        text-align: center;
+        font-weight: 600;
+        font-size: 32px;
+        height: 70px;
+    }
+    .form-wrapper #error_message{
+        display: none;
+    }
+    .form-wrapper .middle{
+        height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .form-wrapper .middle input{
+        outline: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        width: 100%;
+        padding: 8px 0;
+    }
+    .form-wrapper .middle button{
+        height: 50px;
+    }
+    .form-wrapper .bottom {
+        text-align: center;
+        color: grey;
+    }
+    .form-wrapper .bottom a{
+        color: grey;
+        font-weight: 600;
+    }
+    .form-wrapper .middle .reg_alert {
+        display: none;
+        color: red;
+        font-size: 12px;
+        
+    }
+</style>
+<body>
+    <%- include('header.html') -%>
+    <div class="wrapper">
+        <div class="form-wrapper">
+            <div class="top">
+                Register
+            </div>
+            <div class="middle">
+                <input id="fullname" type="text" class="reg_inp" placeholder=" FullName">
+                <p id="user_alert" class="reg_alert">Tên tài khoản đã tồn tại.</p>
+                <p id="userlength_alert" class="reg_alert">Tên tài khoản tối thiểu 6 kí tự và tối đa 20 kí tự.</p>
+                <input id="username" class="reg_inp" type="text" placeholder=" Username">
+                <p id="passlength_alert" class="reg_alert">Mật khẩu phải chứa tối thiểu 6 kí tự và tối đa 20 kí tự.</p>
+                <input id="password" class="reg_inp" type="password" placeholder=" Password">
+                <p id="repass_alert" class="reg_alert">Mật khẩu không trùng khớp.</p>
+                <input id="repassword" class="reg_inp" t type="password" placeholder=" Repassword">
+                <p id="email_alert" class="reg_alert">Email đã có người đăng kí.</p>
+                <input id="email" class="reg_inp" t type="text" placeholder=" Email">
+                <button id="Register_btn">Đăng kí</button>
+            </div>
+            <div class="bottom">
+                <span class="register-sms">Don't have an account?</span>
+                <a href="/register">Sign Up</a>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        // nễu lấy ở đây thì sẽ là trắng, vì vừa vào ttrangweb nó đã lấy giá trị thì chưa có gì
+        //Ẩn thông báo đăng kí sau 2s
+        function alert_hide(){
+            $('.reg_alert').hide();
+            $('.reg_inp').css('border-color','rgb(118, 118, 118)')
+            $('.reg_inp').css('color','black')
+        }
+
+        $('#Register_btn').on('click', function() {
+            // phải lấy giá trị của textboxx khi mà click
+            let fullname = $('#fullname').val();
+            let username = $('#username').val();
+            let password = $('#password').val();
+            let repassword = $('#repassword').val();
+            let email = $('#email').val();
+            $.ajax({
+                type: 'POST',
+                url: `/api/users/register/`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+                data: { 
+                    fullname: fullname,
+                    username: username,
+                    password: password,
+                    repassword:repassword,
+                    email: email
+                },
+                success: function(resultData) {
+                    if(resultData.status=='user'){
+                        $('#user_alert').show();
+                        $('#username').css('border-color','red');
+                        $('#username').css('color','red');
+                        setTimeout(alert_hide, 2000);
+                    }else if(resultData.status=='repass'){
+                        $('#repass_alert').show();
+                        setTimeout(alert_hide, 2000);
+                    }else if(resultData.status=='email'){
+                        $('#email_alert').show();
+                        setTimeout(alert_hide, 2000);
+                    }else if(resultData.status=='userlength'){
+                        $('#userlength_alert').show();
+                        setTimeout(alert_hide, 2000);
+                    }else if(resultData.status=='passlength'){
+                        $('#passlength_alert').show();
+                        setTimeout(alert_hide, 2000);
+                    }
+                    else{
+                        alert('Đăng kí thành công!')
+                        window.location.href = '/login'
+                    }
+                    
+                }
+            });
+        });
+    </script>
+</body>
+</html>

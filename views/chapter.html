@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('head.html') -%>
+<body>
+    <%- include('header.html') -%>
+    <!-- 
+        Màn hình đọc truyện:
+
+        Hiển thị danh sách chương khi người dùng click vào xem danh sách chương
+            Hiển thị thông tin truyện, chương (tên)
+        Cho phép next chương quay lại chương
+            Đổi chương truyện thì chuyển chương
+        Ẩn khi không có chương trước hoặc chương tiếp
+        Cho phép next chương bằng phím (Bạn có thể dùng phím mũi tên hoặc WASD để lùi/sang chương.)
+
+        TODO: Cho phép tùy chỉnh cách hiển thị (font chữ, màu nền)
+
+        TODO: Cho phép download truyện offline (cần chờ server)
+        TODO: Cho phép nghe truyện
+     -->
+    <div id="content">
+        <div class="wrapper">
+            <div class="chapter">
+
+                <div style="display:none;" id="story_hash_name"><%= meta.story_hash_name %></div>
+                <div style="display:none;" id="chapter_hash_name"><%= chapter %></div>
+                <!-- Hiển thị thông tin truyện, chương (tên) -->
+                <h2><a href="/doc-truyen/<%= story %>"><%= story_meta.name %></a></h2>
+                <h3><a href="/doc-truyen/<%= story %>/<%= chapter %>" id="chapter_name"> <%= meta.name %> </a></h3>
+
+
+                <div class="chapter_controls">
+                    <button class="btnPrevChapter"> Chương trước </button>
+                    <div class="chaptersList">Danh sách chương</div>
+                    <button class="btnNextChapter"> Chương tiếp </button>
+                </div>
+
+                <div class="chapter_content" style="font-family: 'Arial', Courier, monospace;">
+                    <%- content %>
+                </div>
+
+                <div style="text-align: center; color: grey; padding: 8px;"> Bạn có thể sử dụng phím A/D để chuyển chương trước/tiếp </div>
+
+                <div class="chapter_controls">
+                    <button class="btnPrevChapter"> Chương trước </button>
+                    <div class="chaptersList">Danh sách chương</div>
+                    <button class="btnNextChapter"> Chương tiếp </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        hash_name = $('#story_hash_name').html();
+        current_chapter = $('#chapter_name').html();
+        chapter_hash_name = $('#chapter_hash_name').html();
+        $.ajax({
+            type: 'POST',
+            url: `/api/stories/add_current_chapter/`, // Không dùng được biển config.... ở đây, biến đó thuộc về sẻver
+            data: { 
+                username: username,
+                hash_name:hash_name,
+                chapter_hash_name:chapter_hash_name,
+                current_chapter: current_chapter
+
+            },
+            success: function(data) {
+            }
+        });
+        $(document).ready(function() {
+            var story = '<%= story %>'
+            var chapter = '<%= chapter %>'
+            function goNextChapter() { window.location.href = '/doc-truyen/<%= story %>/<%= meta.next %>' }
+            function goPrevChapter() { window.location.href = '/doc-truyen/<%= story %>/<%= meta.prev %>' }
+            
+            { // Cho phép next chương quay lại chương
+                // TODO: Ẩn khi không có chương trước hoặc chương tiếp
+                $('.btnPrevChapter').click(function() {
+                    goPrevChapter()
+                })
+
+                $('.btnNextChapter').click(function() {
+                    goNextChapter()
+                })
+            }
+            
+            { // Hiển thị danh sách chương khi người dùng click vào xem danh sách chương
+                $('.chaptersList').click(function() {
+                    $.get('/api/chapters_list/<%= story %>', function(data) {
+                        if ( $('.chaptersList').hasClass('loaded') ) { return;}
+
+                        let option_item = (item) => `<option value="${item.hash_name}">${item.name}</option>`
+                        let html = `<select>
+                                        ${data.map(option_item)} 
+                                    </select>`
+                        $('.chaptersList').html(html)
+
+                        $('.chaptersList').addClass('loaded')
+                                    
+                        // Đổi chương truyện thì chuyển chương
+                        $('.chaptersList.loaded select').on('change', function() {
+                            let selected_chapter = $(this).val();
+                            console.info('chapter list changed', selected_chapter)
+                            window.location.href = `/doc-truyen/${story}/${selected_chapter}`
+                        })
+                    })
+                })
+            }
+
+            
+            { // Cho phép next chương bằng phím (Bạn có thể dùng phím mũi tên hoặc WASD để lùi/sang chương.)
+                $(document).keypress(function(event) {
+                    if ( event.key == 'a' ) { // prev chapter
+                        goPrevChapter()
+                    } else if ( event.key == 'd' ) { // next chapter
+                        goNextChapter()
+                    }
+                })
+            }
+
+        })
+    </script>
+
+    <%- include('footer.html') -%>
+</body>
+</html>
+
+
